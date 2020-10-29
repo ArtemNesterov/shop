@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Darice{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex align-items-center py-3">
+            <h2 class="mr-auto">Darice</h2>
+
+            {% if user.is_authenticated %}
+                <a href="logout" class="btn btn-outline-primary px-4 ml-4">
+                    <i class="fa fa-sign-out mr-2" aria-hidden="true"></i>
+                    <span>Logout ({{ user.username }})</span>
+                </a>
+            {% else %}
+                <a href="register" class="btn btn-primary px-4 ml-4">
+                    <i class="fa fa-user-plus mr-2" aria-hidden="true"></i>
+                    <span>Register</span>
+                </a>
+                <a href="login" class="btn btn-outline-primary px-4 ml-4">
+                    <i class="fa fa-sign-in mr-2" aria-hidden="true"></i>
+                    <span>Login</span>
+                </a>
+            {% endif %}
+
+        </div>
+
+        <h1>Home page</h1>
+        <div class="row pb-5">
+            {% for product in products %}
+                <div class="col-12 col-md-6 col-lg-4 mt-4">
+                    <div class="card w-100" style="width: 18rem;">
+                        <img class="card-img-top" src="{{ product.image }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Item #{{ product.item }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">UPC:</div>
+                                <div>{{ product.upc }}</div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">price:</div>
+                                <div>${{ product.price }}</div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">case_pack:</div>
+                                <div>{{ product.case_pack }} EA</div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">inner_pack:</div>
+                                <div>{{ product.inner_pack }} EA</div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">in_stock:</div>
+                                <div>
+                                    {% if product.in_stock %} Yes {% else %} No {% endif %}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">color:</div>
+                                <div>{{ product.color }}</div>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <div class="mr-auto">shape:</div>
+                                <div>{{ product.shape }}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

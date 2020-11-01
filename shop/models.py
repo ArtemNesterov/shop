@@ -6,7 +6,7 @@ from django.db import models
 """
 
 
-class User(AbstractUser):
+class MyUser(AbstractUser):
     cash = models.FloatField(max_length=10)  # сумма денег у пользователя
 
 
@@ -23,4 +23,4 @@ class Product(models.Model):
 
 class Image(models.Model):
     image = models.CharField(max_length=500)
-    product = models.ForeignKey(Product, related_name='images')
+    product = models.ForeignKey(Product, related_name='images', on_delete='')

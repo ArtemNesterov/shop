@@ -35,36 +35,15 @@
                             <h5 class="card-title">Item #{{ product.item }}</h5>
                             <p class="card-text">{{ product.description }}</p>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex">
-                                <div class="mr-auto">UPC:</div>
-                                <div>{{ product.upc }}</div>
-                            </li>
                             <li class="list-group-item d-flex">
                                 <div class="mr-auto">price:</div>
                                 <div>${{ product.price }}</div>
-                            </li>
-                            <li class="list-group-item d-flex">
-                                <div class="mr-auto">case_pack:</div>
-                                <div>{{ product.case_pack }} EA</div>
-                            </li>
-                            <li class="list-group-item d-flex">
-                                <div class="mr-auto">inner_pack:</div>
-                                <div>{{ product.inner_pack }} EA</div>
                             </li>
                             <li class="list-group-item d-flex">
                                 <div class="mr-auto">in_stock:</div>
                                 <div>
                                     {% if product.in_stock %} Yes {% else %} No {% endif %}
                                 </div>
-                            </li>
-                            <li class="list-group-item d-flex">
-                                <div class="mr-auto">color:</div>
-                                <div>{{ product.color }}</div>
-                            </li>
-                            <li class="list-group-item d-flex">
-                                <div class="mr-auto">shape:</div>
-                                <div>{{ product.shape }}</div>
                             </li>
                         </ul>
                     </div>

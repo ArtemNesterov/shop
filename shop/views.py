@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, FormView
 
-from shop.forms1 import UserCreateForm
+from shop.forms1 import UserCreationForm
 from shop.models import Product
 
 """
@@ -21,45 +21,41 @@ class MainView(TemplateView):
         """
         if request.user.is_authenticated:
             products = Product.objects.all()
-            ctx = {'products': products}
-            return render(request, self.template_name, ctx)
+            l = {'products': products}
+            return render(request, self.template_name, l)
         else:
             return render(request, self.template_name, {})
 
 
 """
-Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации,
-указана ссылка на страницу входа для зарегистрированных пользователей.
+Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации
 """
 
 
 class RegisterFormView(FormView):
-    form_class = UserCreateForm
+    form_class = UserCreationForm
     """
-    Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
     Указана ссылка на страницу входа для зарегистрированных пользователей.
     """
     template_name = 'register.html'
     success_url = '/login/'
 
+    def form_valid(self, form):
+        """
+        Создаём пользователя, если данные в форму были введены корректно.
+        """
+        form.save()
+        return super(RegisterFormView, self).form_valid(form)
 
-def form_valid(self, form):
-    """
-    Создаём пользователя, если данные в форму были введены корректно.
-    """
-    form.save()
-    return super(RegisterFormView, self).form_valid(form)
-
-
-def form_invalid(self, form):
-    """
-    Если данные введены не верно, возврат на регистрацию
-    """
-    return super(RegisterFormView, self).form_invalid(form)
+    def form_invalid(self, form):
+        """
+        Если данные введены не верно, возврат на регистрацию
+        """
+        return super(RegisterFormView, self).form_invalid(form)
 
 
 class LoginFormView(FormView):
-    form_class = AuthenticationForm
+    form_class = UserCreationForm
     template_name = 'login.html'
     success_url = '/'
 

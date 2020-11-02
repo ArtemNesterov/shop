@@ -59,7 +59,7 @@ class Buy(models.Model):
     purchase_time = models.DateTimeField(auto_now_add=True)  # покупка
 
     def __str__(self):
-        return str(self.product)
+        return "User: {} has {} items. Their total is ${}".format(self.user, self.count, self.product)
 
 
 class Return(models.Model):

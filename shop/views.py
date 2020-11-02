@@ -8,7 +8,7 @@ from shop.forms1 import UserCreationForm
 from shop.models import Product
 
 """
-Ссылка, на которой будет отображаться продукт
+The link on which the product will be displayed
 """
 
 
@@ -17,7 +17,7 @@ class MainView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         """
-        Если пользователь аутифинцирован, то показать список продуктов(товара)
+        If the user is autistic, then show the list of products
         """
         if request.user.is_authenticated:
             products = Product.objects.all()
@@ -28,28 +28,28 @@ class MainView(TemplateView):
 
 
 """
-Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации
+Link to which the user will be redirected in case of successful registration
 """
 
 
 class RegisterFormView(FormView):
     form_class = UserCreationForm
     """
-    Указана ссылка на страницу входа для зарегистрированных пользователей.
+    There is a link to the login page for registered users.
     """
     template_name = 'register.html'
     success_url = '/login/'
 
     def form_valid(self, form):
         """
-        Создаём пользователя, если данные в форму были введены корректно.
+        We create a user if the data in the form were entered correctly.
         """
         form.save()
         return super(RegisterFormView, self).form_valid(form)
 
     def form_invalid(self, form):
         """
-        Если данные введены не верно, возврат на регистрацию
+        If the data entered is incorrect, return to registration
         """
         return super(RegisterFormView, self).form_invalid(form)
 
@@ -61,12 +61,12 @@ class LoginFormView(FormView):
 
     def form_valid(self, form):
         """
-        получение объекта пользователя
+       user object reception
         """
         self.user = form.get_user()
 
         """
-        аутентификация пользователя
+        user authentication
         """
         login(self.request, self.user)
         return super(LoginFormView, self).form_valid(form)
@@ -77,13 +77,13 @@ class LoginFormView(FormView):
 
 class LogoutView(View):
     """
-    Выполняем выход для пользователя
+    Execute logout for user
     """
 
     def get(self, request):
         logout(request)
         """
-        Перенаправляем пользователя на главную страницу.
+        We redirect the user to the main page.
         """
 
         return HttpResponseRedirect('/')

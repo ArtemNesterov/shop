@@ -50,3 +50,19 @@ class Product(models.Model):
         from datetime import datetime as datetime
         now = str(datetime.now())
         return '{}-{}'.format(self.item, now)
+
+
+class Buy(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)  # счетчик покупок
+    purchase_time = models.DateTimeField(auto_now_add=True)  # покупка
+
+    def __str__(self):
+        return str(self.product)
+
+
+class Return(models.Model):
+    buy = models.ForeignKey(Buy, null=True, blank=True, on_delete=models.CASCADE)
+
+

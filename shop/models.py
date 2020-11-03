@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, User
 from django.db import models
+from django.utils import timezone
 
 """
 Description of models 
@@ -7,7 +8,7 @@ Description of models
 
 
 class MyUser(User):
-    cash = models.DecimalField(max_digits=8, decimal_places=2)  # сумма денег у пользователя
+    cash = models.PositiveIntegerField(default=10000)  # сумма денег у пользователя
 
 
 class Image(models.Model):
@@ -53,10 +54,10 @@ class Product(models.Model):
 
 
 class Buy(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(MyUser, null=True, blank=True, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)  # счетчик покупок
-    purchase_time = models.DateTimeField(auto_now_add=True)  # покупка
+    purchase_time = models.DateTimeField(default=timezone.now)  # покупка
 
     def __str__(self):
         return "User: {} has {} items. Their total is ${}".format(self.user, self.count, self.product)
@@ -64,5 +65,7 @@ class Buy(models.Model):
 
 class Return(models.Model):
     buy = models.ForeignKey(Buy, null=True, blank=True, on_delete=models.CASCADE)
+    return_time = models.DateTimeField(default=timezone.now)
 
-
+    def __str__(self):
+        return '{}-{}'.format(self.product, self.price, self.purchase_time, self.count, self.user)

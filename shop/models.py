@@ -52,43 +52,28 @@ class Product(models.Model):
         now = str(datetime.now())
         return '{}-{}'.format(self.item, now)
 
+    # class PurchasedProduct(models.Model):
+    #   item = models.OneToOneField(Product, on_delete=models.CASCADE)
+    #  transaction_number = models.CharField(max_length=100)
 
-class PurchasedProduct(models.Model):
-    item = models.OneToOneField(Product, on_delete=models.CASCADE)
-    transaction_number = models.CharField(max_length=100)
-
-
-class Cart(models.Model):
-    selected_items = models.ManyToManyField(Product)
-    purchased_items = models.ManyToManyField(PurchasedProduct)
+    # class Cart(models.Model):
+    #   selected_items = models.ManyToManyField(Product)
+    #  purchased_items = models.ManyToManyField(PurchasedProduct)
 
 
+class Buy(models.Model):
+    user = models.ForeignKey(MyUser, null=True, blank=True, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)  # счетчик покупок
+    purchase_time = models.DateTimeField(default=timezone.now)  # покупка
+
+    def __str__(self):
+        return "User: {} has {} items. Their total is ${}".format(self.user, self.count, self.product)
 
 
+class Return(models.Model):
+    buy = models.ForeignKey(Buy, null=True, blank=True, on_delete=models.CASCADE)
+    return_time = models.DateTimeField(default=timezone.now)
 
-
-
-
-
-
-
-
-
-
-
-# class Buy(models.Model):
-#     user = models.ForeignKey(MyUser, null=True, blank=True, on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE)
-#     count = models.PositiveIntegerField(default=0)  # счетчик покупок
-#     purchase_time = models.DateTimeField(default=timezone.now)  # покупка
-#
-#     def __str__(self):
-#         return "User: {} has {} items. Their total is ${}".format(self.user, self.count, self.product)
-#
-#
-# class Return(models.Model):
-#     buy = models.ForeignKey(Buy, null=True, blank=True, on_delete=models.CASCADE)
-#     return_time = models.DateTimeField(default=timezone.now)
-#
-#     def __str__(self):
-#         return '{}-{}'.format(self.product, self.price, self.purchase_time, self.count, self.user)
+    def __str__(self):
+        return '{}-{}-{}-{}-{}'.format(self.buy.product, self.buy.product.price, self.buy.purchase_time, self.buy.count)

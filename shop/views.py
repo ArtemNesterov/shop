@@ -2,10 +2,10 @@ from django.contrib.auth import login, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, ListView
 
 from shop.forms1 import UserCreationForm
-from shop.models import Product
+from shop.models import Product, Buy, Return
 
 """
 The link on which the product will be displayed
@@ -25,6 +25,32 @@ class MainView(TemplateView):
             return render(request, self.template_name, l)
         else:
             return render(request, self.template_name, {})
+
+
+"""
+shopping list
+"""
+
+
+class BuyList(ListView):
+    model = Buy
+    paginate_by = 10
+    template_name = 'buy.html '
+
+    def get_queryset(self):
+        return Buy.objects.filter(user=self.request.user)
+
+
+"""
+Returns list
+"""
+
+
+class ReturnListView(ListView):
+    model = Return
+    paginate_by = 10
+    template_name = 'return_list.html'
+    queryset = Return.objects.all()
 
 
 """
@@ -87,3 +113,5 @@ class LogoutView(View):
         """
 
         return HttpResponseRedirect('/')
+
+

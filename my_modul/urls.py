@@ -29,6 +29,7 @@ urlpatterns = [
     path('login/', views.LoginFormView.as_view()),
     path('logout/', views.LogoutView.as_view()),
     path('/', views.MainView.as_view()),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

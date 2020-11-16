@@ -1,8 +1,11 @@
+from datetime import timezone, timedelta
+from pyexpat.errors import messages
+
 from django.contrib.auth import login, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, FormView, ListView
+from django.views.generic import TemplateView, FormView, ListView, CreateView, UpdateView
 
 from shop.forms1 import UserCreationForm
 from shop.models import Product, Buy, Return
@@ -51,6 +54,67 @@ class ReturnListView(ListView):
     paginate_by = 10
     template_name = 'return_list.html'
     queryset = Return.objects.all()
+
+
+class ProductCreate(CreateView):
+    """
+     Create products
+    """
+    model = Product
+    template_name = 'product_add'
+    success_url = '/'
+
+
+class ProductUpdate(UpdateView):
+    """
+       Update products
+     """
+    model = Product
+    template_name = 'product_add'
+    fields = ['count', 'item', 'price', 'in_stock', 'description', 'image']
+    success_url = '/'
+
+
+class ReturnCreate(CreateView):
+    """
+     Create return
+    """
+    model = Return
+    success_url = '/buy/'
+
+    def form_valid(self, form):
+        """
+        not stored in the database
+        """
+        buy_return = form.save(commit=False)
+        """
+        get the item
+        """
+        buy_id = self.request.Post.get('buy_id')
+        buy = Buy.objects.get(id=buy_id)
+        """
+        add a purchase to return the object
+        """
+        buy_return.buy = buy
+        """
+        the purchase was made no later than 3 minutes
+        """
+        buy_time = buy_return.buy.created_at
+        now = timezone.now()
+        if now < buy_time + timedelta(minutes=3):
+            """
+            Save
+            """
+            buy_return.save()
+            messages.success(self.request, 'Purchase return request sent.')
+            return super().form_valid(form=form)
+        else:
+            """
+            Purchase too old. No return possible.
+            """
+            messages.error(self.request,
+                           'Purchase too old. No return possible.')
+            return HttpResponseRedirect(self.success_url)
 
 
 """
@@ -113,5 +177,3 @@ class LogoutView(View):
         """
 
         return HttpResponseRedirect('/')
-
-

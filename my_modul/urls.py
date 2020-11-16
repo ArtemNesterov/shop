@@ -18,10 +18,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 
-from django.urls import path
-
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from shop import views
+from shop.API.resurses import UserViewSet, BuyViewSet, ProductViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,3 +34,14 @@ urlpatterns = [
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register('user', UserViewSet)
+router.register('buy', BuyViewSet)
+router.register('product', ProductViewSet)
+
+# The API URLs are now determined automatically by the router.
+urlpatterns = [
+    path('', include(router.urls)),
+]

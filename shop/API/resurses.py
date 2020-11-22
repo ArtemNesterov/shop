@@ -1,3 +1,4 @@
+from rest_framework.authentication import BasicAuthentication
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from shop.models import MyUser, Buy, Product
@@ -17,3 +18,8 @@ class BuyViewSet(ModelViewSet):
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+    authentication_classes = [BasicAuthentication,]
+
+
+
+
